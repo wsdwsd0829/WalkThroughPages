@@ -19,9 +19,36 @@
  */
 
 
+@implementation PageData
+-(instancetype) initWitTitle:(NSString*)title withImageName:(NSString*)imageName withExplanation:(NSString*)explanation{
+    self = [super init];
+    if(self){
+        self.pageTitle = title;
+        self.imageName = imageName;
+        self.pageExplanation = explanation;
+        self.isLastPage = NO;
+    }
+    return self;
+}
+    
+
++(NSArray*)defaultPageData{
+    NSMutableArray* pages = [[NSMutableArray alloc] init];
+    PageData* abstractPage = [[PageData alloc] initWitTitle:@"First Title" withImageName:@"Page.png" withExplanation:@"\"Abstracts\": explain your pages here"];
+    PageData* abstractListPage = [[PageData alloc] initWitTitle:@"Review Abstractions" withImageName:@"Page.png" withExplanation:@"explain your pages here"];
+    PageData* evernnotePage = [[PageData alloc] initWitTitle:@"Browse notes" withImageName:@"Page.png" withExplanation:@"explain your pages here"];
+    PageData* settingPage = [[PageData alloc] initWitTitle:@"Pereferences" withImageName:@"settingPage.png" withExplanation:@"explain your pages here"];
+    settingPage.isLastPage = YES;
+    pages = [NSMutableArray arrayWithArray:@[abstractPage, abstractListPage, evernnotePage,settingPage]];
+    return pages;
+}
+@end
+
+
 @interface ModelController ()
 
 @property (readonly, strong, nonatomic) NSArray *pageData;
+@property (readonly, strong, nonatomic) NSArray *allPageData;
 @end
 
 @implementation ModelController
@@ -32,26 +59,29 @@
         // Create the data model.
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         _pageData = [[dateFormatter monthSymbols] copy];
+        _allPageData = [PageData defaultPageData];
+        
     }
     return self;
 }
 
+
 - (DataViewController *)viewControllerAtIndex:(NSUInteger)index storyboard:(UIStoryboard *)storyboard {
     // Return the data view controller for the given index.
-    if (([self.pageData count] == 0) || (index >= [self.pageData count])) {
+    if (([self.allPageData count] == 0) || (index >= [self.allPageData count])) {
         return nil;
     }
 
     // Create a new view controller and pass suitable data.
     DataViewController *dataViewController = [storyboard instantiateViewControllerWithIdentifier:@"DataViewController"];
-    dataViewController.dataObject = self.pageData[index];
+    dataViewController.dataObject = self.allPageData[index];
     return dataViewController;
 }
 
 - (NSUInteger)indexOfViewController:(DataViewController *)viewController {
     // Return the index of the given data view controller.
     // For simplicity, this implementation uses a static array of model objects and the view controller stores the model object; you can therefore use the model object to identify the index.
-    return [self.pageData indexOfObject:viewController.dataObject];
+    return [self.allPageData indexOfObject:viewController.dataObject];
 }
 
 #pragma mark - Page View Controller Data Source
@@ -75,7 +105,7 @@
     }
     
     index++;
-    if (index == [self.pageData count]) {
+    if (index == [self.allPageData count]) {
         return nil;
     }
     return [self viewControllerAtIndex:index storyboard:viewController.storyboard];

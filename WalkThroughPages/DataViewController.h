@@ -10,8 +10,11 @@
 
 @interface DataViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UILabel *dataLabel;
+@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UILabel* explanationLabel;
 @property (strong, nonatomic) id dataObject;
+@property (weak, nonatomic) IBOutlet UIButton *jumpBtn;
 
 @end
 

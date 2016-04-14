@@ -7,6 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+@interface PageData : NSObject
+@property NSString* pageTitle;
+@property NSString* imageName;
+@property NSString* pageExplanation;
+@property BOOL isLastPage;
+@end
+
 
 @class DataViewController;
 

@@ -16,8 +16,28 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.window makeKeyAndVisible];
+    
+    [self launchViewController];
     // Override point for customization after application launch.
     return YES;
+}
+-(void) launchViewController{
+    UIStoryboard* storyboard = nil;
+    BOOL isFirstLoading = [[NSUserDefaults standardUserDefaults] boolForKey:@"first_loading"];
+    if(!isFirstLoading){
+        
+        //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"first_loading"];
+        storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIViewController* wtvc = [storyboard instantiateViewControllerWithIdentifier:@"RootID"];
+        self.window.rootViewController = wtvc;
+    }else{
+        storyboard = [UIStoryboard storyboardWithName:@"LaunchContent" bundle:nil];
+        UITabBarController* tbvc = [storyboard instantiateViewControllerWithIdentifier:@"ContentID"];
+        self.window.rootViewController = tbvc;
+    }
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
